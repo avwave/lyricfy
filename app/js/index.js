@@ -37,9 +37,7 @@ var search_musix_api = (song, artist) => {
         var info = JSON.parse(body);
         var lyric_url = _.get(info, 'message.body.track_list[0].track.track_share_url');
         if (lyric_url != null) {
-          getLyrics(song, artist, lyric_url);
-        } else {
-          wait();
+            getLyrics(song, artist, lyric_url);
         }
     }
     request(options, callback);
@@ -64,12 +62,10 @@ var getLyrics = (song, artist, url) => {
                 var lyrics = data.text();
                 lyric_container.innerHTML = nl2br(lyrics);
                 error_container.innerHTML = "";
-                wait();
             })
         } else {
             lyric_container.innerHTML = "";
             error_container.innerHTML = "No lyrics";
-            wait();
         }
     }
     request(options, callback);
@@ -78,13 +74,13 @@ var getLyrics = (song, artist, url) => {
 // getSpotify();
 
 helper.player.on('ready', () => {
-  helper.player.on('track-change', (track) => {
-    var artist = helper.status.track.artist_resource.name;
-    var song = helper.status.track.track_resource.name;
-    song = song.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
-    artist = artist.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
-    search_musix_api(song, artist);
-  })
+    helper.player.on('track-change', (track) => {
+        var artist = helper.status.track.artist_resource.name;
+        var song = helper.status.track.track_resource.name;
+        song = song.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
+        artist = artist.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
+        search_musix_api(song, artist);
+    })
 });
 
 process.on('uncaughtException', function(err) {
