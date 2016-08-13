@@ -4,8 +4,8 @@ const queryString = require('query-string');
 const request = require("request");
 const cheerio = require('cheerio');
 const nl2br = require('nl2br');
-const nodeSpotifyWebHelper = require('node-spotify-webhelper');
-const spotify = new nodeSpotifyWebHelper.SpotifyWebHelper();
+var SpotifyWebHelper = require('@jonny/spotify-web-helper')
+var helper = SpotifyWebHelper()
 
 require('dotenv').config();
 const MM_apiKey = process.env.MM_API_KEY;
@@ -45,43 +45,6 @@ var search_musix_api = (song, artist) => {
     request(options, callback);
 }
 
-var getSpotify = () => {
-    spotify.getStatus((err, res) => {
-        if (err) {
-            error_container.innerHTML = err;
-            return;
-        }
-        var artist = res.track.artist_resource.name;
-        var song = res.track.track_resource.name;
-        song = song.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
-        artist = artist.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
-        search_musix_api(song, artist);
-    })
-}
-
-var getNewInfo = () => {
-    spotify.getStatus((err, res) => {
-        if (err) {
-            error_container.innerHTML = err;
-            return;
-        }
-        var artist_new = res.track.artist_resource.name;
-        var song_new = res.track.track_resource.name;
-        song_new = song_new.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
-        artist_new = artist_new.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
-
-        if (song_new !== song || artist !== artist_new) {
-            search_musix_api(song_new, artist_new);
-        }
-        wait();
-    });
-};
-
-var wait = () => {
-    setTimeout(getNewInfo, 5000)
-}
-
-
 var getLyrics = (song, artist, url) => {
     title_container.innerHTML = `${artist} - ${song}`;
     ext_link.innerHTML = url;
@@ -95,7 +58,7 @@ var getLyrics = (song, artist, url) => {
 
     var callback = (error, response, body) => {
         if (!error && response.statusCode == 200) {
-            let $ = cheerio.load(body);            
+            let $ = cheerio.load(body);
             $('.mxm-lyrics__content').filter(function() {
                 var data = $(this);
                 var lyrics = data.text();
@@ -112,7 +75,17 @@ var getLyrics = (song, artist, url) => {
     request(options, callback);
 }
 
-getSpotify();
+// getSpotify();
+
+helper.player.on('ready', () => {
+  helper.player.on('track-change', (track) => {
+    var artist = helper.status.track.artist_resource.name;
+    var song = helper.status.track.track_resource.name;
+    song = song.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
+    artist = artist.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
+    search_musix_api(song, artist);
+  })
+});
 
 process.on('uncaughtException', function(err) {
     error_container.innerHTML = err;

@@ -10,9 +10,12 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^2.2.0",
+    "electron-builder": "^5.25.1",
+    "electron-packager": "^7.5.1",
     "electron-prebuilt": "^1.2.0"
   },
   "dependencies": {
+    "@jonny/spotify-web-helper": "^1.0.4",
     "cheerio": "^0.20.0",
     "colors": "^1.1.2",
     "dotenv": "^2.0.0",
