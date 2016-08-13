@@ -75,8 +75,8 @@ var getLyrics = (song, artist, url) => {
 
 helper.player.on('ready', () => {
     helper.player.on('track-change', (track) => {
-        var artist = helper.status.track.artist_resource.name;
-        var song = helper.status.track.track_resource.name;
+        var artist = track.artist_resource.name;
+        var song = track.track_resource.name;
         song = song.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
         artist = artist.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
         search_musix_api(song, artist);
