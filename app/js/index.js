@@ -74,6 +74,11 @@ var getLyrics = (song, artist, url) => {
 // getSpotify();
 
 helper.player.on('ready', () => {
+    var artist = helper.status.track.artist_resource.name;
+    var song = helper.status.track.track_resource.name;
+    song = song.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
+    artist = artist.replace(/ /g, "-").replace('.', '').replace(/\-$/, '');
+    search_musix_api(song, artist);
     helper.player.on('track-change', (track) => {
         var artist = track.artist_resource.name;
         var song = track.track_resource.name;
