@@ -1,0 +1,8 @@
+#content .character {
+  float: left;
+  padding: 25px;
+  max-width: 100px; }
+  #content .character img {
+    width: 100%; }
+
+/*# sourceMappingURL=styles.css.map */
